@@ -1,0 +1,11 @@
+{
+    "name": "Capitalizar Inmobiliaria S.A.S",
+    "short_name": "Capitalizar",
+    "description": "Inmobiliaria moderna en Guayaquil, Ecuador. Acompañamos a familias e inversionistas en la construcción de su patrimonio.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1a1a2e",
+    "lang": "es-EC",
+    "orientation": "portrait-primary"
+}
