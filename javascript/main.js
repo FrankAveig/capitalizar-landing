@@ -1,6 +1,47 @@
 'use strict';
 
 (function () {
+    const WHATSAPP_PHONE = '593987098858';
+    const WA_ME_PREFIX = 'https://wa.me/' + WHATSAPP_PHONE;
+
+    /** Escritorio → web.whatsapp.com; móvil/tablet → wa.me (abre la app) */
+    function isDesktopWhatsApp() {
+        return window.matchMedia('(min-width: 1024px)').matches;
+    }
+
+    function buildWhatsAppUrl(text) {
+        const enc = encodeURIComponent(text);
+        if (isDesktopWhatsApp()) {
+            return 'https://web.whatsapp.com/send?phone=' + WHATSAPP_PHONE + '&text=' + enc;
+        }
+        return WA_ME_PREFIX + '?text=' + enc;
+    }
+
+    function initWhatsAppSmartLinks() {
+        document.body.addEventListener(
+            'click',
+            function (e) {
+                const a = e.target.closest('a[href^="' + WA_ME_PREFIX + '"]');
+                if (!a || !isDesktopWhatsApp()) return;
+                e.preventDefault();
+                let text = '';
+                try {
+                    const u = new URL(a.href);
+                    text = u.searchParams.get('text') || '';
+                } catch (err) {
+                    return;
+                }
+                const next = buildWhatsAppUrl(text);
+                if (a.getAttribute('target') === '_blank') {
+                    window.open(next, '_blank', 'noopener,noreferrer');
+                } else {
+                    window.location.href = next;
+                }
+            },
+            true
+        );
+    }
+
     const header = document.getElementById('header');
     const menuToggle = document.getElementById('menu-toggle');
     const mainNav = document.getElementById('main-nav');
@@ -91,8 +132,8 @@
         if (email) text += `\nMi correo: ${email}`;
         if (mensaje) text += `\n\n${mensaje}`;
 
-        const waUrl = `https://wa.me/593987098858?text=${encodeURIComponent(text)}`;
-        window.open(waUrl, '_blank');
+        const waUrl = buildWhatsAppUrl(text);
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
         contactForm.reset();
     }
 
@@ -149,6 +190,7 @@
         smoothScrollLinks();
         initRevealAnimations();
         animateCounters();
+        initWhatsAppSmartLinks();
     }
 
     if (document.readyState === 'loading') {
