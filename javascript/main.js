@@ -79,18 +79,21 @@
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
 
-        const btn = contactForm.querySelector('.btn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '¡Mensaje enviado! ✓';
-        btn.style.pointerEvents = 'none';
+        const nombre = data.name || '';
+        const email = data.email || '';
+        const telefono = data.phone || '';
+        const proyecto = contactForm.querySelector('#project option:checked')?.textContent || '';
+        const mensaje = data.message || '';
 
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.pointerEvents = '';
-            contactForm.reset();
-        }, 3000);
+        let text = `Hola, soy *${nombre}*`;
+        if (proyecto && proyecto !== 'Seleccionar proyecto') text += `\nMe interesa el proyecto: *${proyecto}*`;
+        if (telefono) text += `\nMi teléfono: ${telefono}`;
+        if (email) text += `\nMi correo: ${email}`;
+        if (mensaje) text += `\n\n${mensaje}`;
 
-        console.log('Form data:', data);
+        const waUrl = `https://wa.me/593987098858?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, '_blank');
+        contactForm.reset();
     }
 
     function smoothScrollLinks() {
