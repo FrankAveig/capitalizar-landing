@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    const WHATSAPP_PHONE = '593987098858';
+    const WHATSAPP_PHONE = '593997161480';
     const WA_ME_PREFIX = 'https://wa.me/' + WHATSAPP_PHONE;
 
     /** Escritorio → web.whatsapp.com; móvil/tablet → wa.me (abre la app) */
